@@ -1,0 +1,71 @@
+﻿
+using System;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Globalization;
+
+
+namespace ProjectHulk
+{
+	class Program
+	{
+		public static void Main(string[] args)
+		{
+			#region Pretty Print
+			Console.Clear();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine(" |__|   |  |   |     |/ \n |  | . |__| . |__ . |\\");
+			Console.WriteLine();
+			#endregion
+			
+			
+			int debugg = 0;
+			
+
+            while (true)
+			{
+				Lexer.Restart();//limpia el imput y reinicia el indice 
+				Console.Write("> ");
+
+				string input= Console.ReadLine();
+
+				if (input == null) continue;
+
+				#region debugger
+				//if (debug == 0)
+				//{
+				//	input = "function f (x)=> if (x==1)1 else x * f(x-1);";
+				//	debug++;
+				//}
+				//else input = "f(99) ;";
+				#endregion
+
+				try
+				{
+					Lexer.TokenizeInput(input);
+
+					Expression result = new HulkExpression();
+					result.Evaluate();
+
+					if ((Lexer.index >= Lexer.Tokens.Count || Expression.ActualToken() != ";") && Lexer.Tokens.Count != 0)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						System.Console.WriteLine("LEXICAL ERROR : Missing ' ; '");
+						Console.ForegroundColor = ConsoleColor.Green;
+					}
+					else
+					{
+						foreach (string Prints in Lexer.ConsolePrints)
+						{
+							Console.WriteLine(Prints);
+						}
+					}
+				}
+				catch (HulkErrors he)
+				{
+					he.PrintError();
+				}
+			}
+		}
+	}
+}

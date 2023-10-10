@@ -1,0 +1,17 @@
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Project-Hulk.exe
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Project-Hulk.deps.json
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Project-Hulk.runtimeconfig.json
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Project-Hulk.dll
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Project-Hulk.pdb
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.csproj.AssemblyReference.cache
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.AssemblyInfoInputs.cache
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.AssemblyInfo.cs
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.csproj.CoreCompileInputs.cache
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.csproj.CopyComplete
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.dll
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\refint\Project-Hulk.dll
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.pdb
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.genruntimeconfig.cache
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\ref\Project-Hulk.dll

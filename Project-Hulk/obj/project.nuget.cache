@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "FDtuhhSaTsK9hh0gPlGOTd1iM3dTnnNPpM1l4lKsaMg1CPcL8gTD5dZZdXLwNrD+Ivjyzsx/sARn7rF+1Ce2Eg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\PGV\\source\\repos\\Project-Hulk\\Project-Hulk\\Project-Hulk.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PGV\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\PGV\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.11\\microsoft.windowsdesktop.app.ref.7.0.11.nupkg.sha512",
+    "C:\\Users\\PGV\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.11\\microsoft.netcore.app.ref.7.0.11.nupkg.sha512",
+    "C:\\Users\\PGV\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.11\\microsoft.aspnetcore.app.ref.7.0.11.nupkg.sha512",
+    "C:\\Users\\PGV\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.11\\microsoft.netcore.app.host.win-x64.7.0.11.nupkg.sha512"
+  ],
+  "logs": []
+}
