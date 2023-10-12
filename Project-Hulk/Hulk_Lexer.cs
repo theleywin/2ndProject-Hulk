@@ -5,7 +5,7 @@ using System.Globalization;
 
 
 
-namespace ProjectHulk
+namespace Project_Hulk
 {
     class Lexer
     {

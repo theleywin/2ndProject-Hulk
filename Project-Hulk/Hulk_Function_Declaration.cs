@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectHulk
+namespace Project_Hulk
 {
 	class FunctionDeclaration : Expression
 	{

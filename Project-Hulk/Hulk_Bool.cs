@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
-namespace ProjectHulk
+namespace Project_Hulk
 {
     class BoolOperator : BinaryExpressions // operadores lógicos "&" "|"
     {
