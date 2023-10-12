@@ -24,7 +24,7 @@ namespace ProjectHulk
             }
             else FunctionDeclaration.functionStack[functionName]++;
 
-            if(ActualToken() == "(")
+            if(Current() == "(")
             {
                 
                 Next();
@@ -34,11 +34,11 @@ namespace ProjectHulk
                 argumentsValue.Clear();
 
                 Dictionary<string , string> Original_values = new Dictionary<string, string>();
-                while(Lexer.index < Lexer.Tokens.Count && ActualToken() != ")")
+                while(Lexer.index < Lexer.Tokens.Count && Current() != ")")
                 {
                     parameter.Evaluate();
                     argumentsValue.Add(parameter.value);
-                    if(ActualToken() != ",")
+                    if(Current() != ",")
                     {
                         break;
                     }
@@ -107,7 +107,7 @@ namespace ProjectHulk
                     }
                 }
 
-                if(ActualToken() == ")")
+                if(Current() == ")")
                 {
                     value = FE.value ;
                    // Console.WriteLine(  value);
@@ -127,11 +127,11 @@ namespace ProjectHulk
     {
         public override void Evaluate()
         {
-            if(ActualToken() == "(")
+            if(Current() == "(")
             {
                 Next();
 
-                if(ActualToken() == ")")
+                if(Current() == ")")
                 {
                     Lexer.index++;
                     Console.WriteLine();
@@ -141,16 +141,16 @@ namespace ProjectHulk
                 Expression printExp = new BoolOperator();
                 printExp.Evaluate();
 
-                if(ActualToken() == ")")
+                if(Current() == ")")
                 {
                     Next();
                     if(Lexer.IsString(printExp.value))
                     {
-                        Lexer.ConsolePrints.Add(printExp.value.Substring( 1 , printExp.value.Length - 2));
+                        Lexer.Prints.Add(printExp.value.Substring( 1 , printExp.value.Length - 2));
                     }
                     else 
                     {
-                        Lexer.ConsolePrints.Add(printExp.value);
+                        Lexer.Prints.Add(printExp.value);
                     }
                     value = printExp.value;
                 }

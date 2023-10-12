@@ -10,15 +10,15 @@ namespace ProjectHulk
 
     class LexicalError : HulkErrors
     {
-        public string BadToken;
+        public string InvalidToken;
         public LexicalError(string BadToken)
         {
-            this.BadToken = BadToken;
+            this.InvalidToken = BadToken;
         }
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            System.Console.WriteLine($"! LEXICAL ERROR: '{BadToken}' isn't a valid token.");
+            System.Console.WriteLine($"! LEXICAL ERROR: '{InvalidToken}' isn't a valid token.");
             Console.ForegroundColor = ConsoleColor.Green;
         }
     }

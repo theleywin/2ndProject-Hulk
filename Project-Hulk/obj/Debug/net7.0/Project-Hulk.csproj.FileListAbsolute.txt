@@ -15,3 +15,4 @@ C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\refint\Proj
 C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.pdb
 C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.genruntimeconfig.cache
 C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\ref\Project-Hulk.dll
+C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\obj\Debug\net7.0\Project-Hulk.sourcelink.json

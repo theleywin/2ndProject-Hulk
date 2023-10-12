@@ -10,7 +10,7 @@ namespace ProjectHulk
         {
             Lexer.index++;
         }
-        static public string ActualToken()
+        static public string Current()
         {
             
             return Lexer.Tokens[Lexer.index];
@@ -24,7 +24,7 @@ namespace ProjectHulk
         public Expression right;
         public bool RightId = false;
 
-        public bool IsFunctionID(string id)
+        public bool IsFunctionName(string id)
         {
             if (FunctionCall.functionsId.ContainsKey(id))
             {
@@ -40,18 +40,18 @@ namespace ProjectHulk
         //expresiones atómicas ( numbers , strings , bool )
         public override void Evaluate()
         {
-            if (Lexer.IsNumber(ActualToken())) // numbers
+            if (Lexer.IsNumber(Current())) // numbers
             {
-                string result = ActualToken();
+                string result = Current();
                 Next();
                 value = result;
             }
-            else if (ActualToken() == "-") // - numbers
+            else if (Current() == "-") // - numbers
             {
                 Next();
                 Expression num = new Atom();
                 bool isIdfunction = false;
-                if (FunctionCall.functionsId.ContainsKey(ActualToken())) isIdfunction = true;
+                if (FunctionCall.functionsId.ContainsKey(Current())) isIdfunction = true;
                 num.Evaluate();
 
                 if (Lexer.TokenType(num.value) == "number")
@@ -67,13 +67,13 @@ namespace ProjectHulk
                     throw new SemanticError("Operator '-'", "Incorrect Operator", Lexer.TokenType(num.value));
                 }
             }
-            else if (Lexer.index < Lexer.Tokens.Count && ActualToken() == "(") // evalúa la expresión dentro del paréntesis
+            else if (Lexer.index < Lexer.Tokens.Count && Current() == "(") // evalúa la expresión dentro del paréntesis
             {
                 Next();
                 Expression result = new BoolOperator();
                 result.Evaluate();
                 string s = result.value;
-                if (Lexer.index < Lexer.Tokens.Count && ActualToken() == ")")
+                if (Lexer.index < Lexer.Tokens.Count && Current() == ")")
                 {
                     Next();
                     value = s;
@@ -84,65 +84,65 @@ namespace ProjectHulk
                 }
 
             }
-            else if (Lexer.index < Lexer.Tokens.Count && Regex.IsMatch(ActualToken(), @"(\u0022([^\u0022\\]|\\.)*\u0022)")) // strings
+            else if (Lexer.index < Lexer.Tokens.Count && Regex.IsMatch(Current(), @"(\u0022([^\u0022\\]|\\.)*\u0022)")) // strings
             {
-                value = ActualToken();
+                value = Current();
                 Next();
             }
-            else if (Lexer.index < Lexer.Tokens.Count && ActualToken() == "let ") // let-in expressions
+            else if (Lexer.index < Lexer.Tokens.Count && Current() == "let ") // let-in expressions
             {
                 Next();
                 Expression l = new Let_in();
                 l.Evaluate();
                 value = l.value;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && ActualToken() == "print") // print expression
+            else if (Lexer.index < Lexer.Tokens.Count && Current() == "print") // print expression
             {
                 Next();
                 Expression p = new Print();
                 p.Evaluate();
                 value = p.value;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && MathExpressions.MathFunctions.Contains(ActualToken())) // Math function expression
+            else if (Lexer.index < Lexer.Tokens.Count && MathExpressions.MathFunctions.Contains(Current())) // Math function expression
             {
-                Expression M = new MathExpressions(ActualToken());
+                Expression M = new MathExpressions(Current());
                 Next();
                 M.Evaluate();
                 value = M.value;
 
             }
-            else if (Lexer.index < Lexer.Tokens.Count && FunctionCall.functionsId.ContainsKey(ActualToken())) // function variable 
+            else if (Lexer.index < Lexer.Tokens.Count && FunctionCall.functionsId.ContainsKey(Current())) // function variable 
             {
-                string s = FunctionCall.functionsId[ActualToken()];
+                string s = FunctionCall.functionsId[Current()];
                 Next();
                 value = s;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && Let_in.idStore.ContainsKey(ActualToken())) // let-in variable
+            else if (Lexer.index < Lexer.Tokens.Count && Let_in.idStore.ContainsKey(Current())) // let-in variable
             {
-                string s = Let_in.idStore[ActualToken()];
+                string s = Let_in.idStore[Current()];
                 Next();
                 value = s;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && FunctionDeclaration.functionStore.ContainsKey(ActualToken())) // function call
+            else if (Lexer.index < Lexer.Tokens.Count && FunctionDeclaration.functionStore.ContainsKey(Current())) // function call
             {
                 int i = Lexer.index;
                 Next();
                 FunctionDeclaration.functionStore[Lexer.Tokens[i]].Evaluate();
                 value = FunctionDeclaration.functionStore[Lexer.Tokens[i]].value;
             }
-            else if (ActualToken() == "if") // If-Else expression
+            else if (Current() == "if") // If-Else expression
             {
                 Next();
                 Expression c = new IfElse();
                 c.Evaluate();
                 value = c.value;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && ActualToken() == "false") // bool false
+            else if (Lexer.index < Lexer.Tokens.Count && Current() == "false") // bool false
             {
                 Next();
                 value = "false";
             }
-            else if (Lexer.index < Lexer.Tokens.Count && ActualToken() == "true") // bool true
+            else if (Lexer.index < Lexer.Tokens.Count && Current() == "true") // bool true
             {
                 Next();
                 value = "true";
@@ -151,13 +151,13 @@ namespace ProjectHulk
             //envio un error porque no es nada valido
             else
             {
-                if (Lexer.IsID(ActualToken()))
+                if (Lexer.IsID(Current()))
                 {
-                    throw new SyntaxError(ActualToken(), "DoNotExistID");
+                    throw new SyntaxError(Current(), "DoNotExistID");
                 }
                 else
                 {
-                    throw new UnexpectedTokenError(ActualToken());
+                    throw new UnexpectedTokenError(Current());
                 }
             }
         }
@@ -174,35 +174,35 @@ namespace ProjectHulk
                 return;
             }
 
-            else if (ActualToken() == "print")
+            else if (Current() == "print")
             {
                 Next();
                 Expression printExp = new Print();
                 printExp.Evaluate();
                 value = printExp.value;
             }
-            else if (ActualToken() == "let ")
+            else if (Current() == "let ")
             {
                 Next();
                 Expression letIn = new Let_in();
                 letIn.Evaluate();
                 value = letIn.value;
             }
-            else if (ActualToken() == "if")
+            else if (Current() == "if")
             {
                 Next();
                 Expression ifelse = new IfElse();
                 ifelse.Evaluate();
                 value = ifelse.value;
             }
-            else if (ActualToken() == "function")
+            else if (Current() == "function")
             {
                 Next();
                 Expression f = new FunctionDeclaration();
                 f.Evaluate();
                 value = "";
             }
-            else if (FunctionDeclaration.functionStore.ContainsKey(ActualToken()))
+            else if (FunctionDeclaration.functionStore.ContainsKey(Current()))
             {
 
                 int i = Lexer.index;
@@ -213,11 +213,11 @@ namespace ProjectHulk
                 {
                     if (Lexer.IsString(value))
                     {
-                        Lexer.ConsolePrints.Add(value.Substring(1, value.Length - 2));// string value 
+                        Lexer.Prints.Add(value.Substring(1, value.Length - 2));// string value 
                     }
                     else
                     {
-                        Lexer.ConsolePrints.Add(value);
+                        Lexer.Prints.Add(value);
                     }
                 }
             }

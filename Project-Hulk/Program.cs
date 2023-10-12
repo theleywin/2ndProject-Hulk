@@ -31,6 +31,8 @@ namespace ProjectHulk
 
 				if (input == null) continue;
 
+				if (input == "break") break;
+
 				#region debugger
 				//if (debug == 0)
 				//{
@@ -42,12 +44,12 @@ namespace ProjectHulk
 
 				try
 				{
-					Lexer.TokenizeInput(input);
+					Lexer.Tokenizer(input);
 
 					Expression result = new HulkExpression();
 					result.Evaluate();
 
-					if ((Lexer.index >= Lexer.Tokens.Count || Expression.ActualToken() != ";") && Lexer.Tokens.Count != 0)
+					if ((Lexer.index >= Lexer.Tokens.Count || Expression.Current() != ";") && Lexer.Tokens.Count != 0)
 					{
 						Console.ForegroundColor = ConsoleColor.Red;
 						System.Console.WriteLine("LEXICAL ERROR : Missing ' ; '");
@@ -55,7 +57,7 @@ namespace ProjectHulk
 					}
 					else
 					{
-						foreach (string Prints in Lexer.ConsolePrints)
+						foreach (string Prints in Lexer.Prints)
 						{
 							Console.WriteLine(Prints);
 						}

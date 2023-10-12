@@ -11,7 +11,7 @@ namespace ProjectHulk
     {
         public static List<string> Tokens = new List<string>();
 
-        public static List<string> ConsolePrints = new List<string>();
+        public static List<string> Prints = new List<string>();
 
         public static  NumberFormatInfo kind = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
 
@@ -30,24 +30,24 @@ namespace ProjectHulk
             {
                 FunctionDeclaration.functionStack[id] = 0;
             }
-            ConsolePrints.Clear();
+            Prints.Clear();
             index = 0;
             Tokens.Clear();
         }
-        public static void TokenizeInput(string input)
+        public static void Tokenizer(string input)
         {
             input = Regex.Replace(input , @"\s+" , " ");
         
             Regex AllTokens = new(@"\d+$|\d+[\.,]{1}\d+|\+|\-|\*|\^|/|%|\(|\)|(=>)|(>=)|(<=)|<[=]{0}|>[=]{0}|!=|;|,|let |={1,2}|function|if|else|!|\&|\||true|false|(\u0022([^\u0022\\]|\\.)*\u0022)|@|\w+|[^\(\)\+\-\*/\^%<>=!&\|,;\s]+");
-            Regex GoodTokens = new(@"^\d+$|^\d+[\.,]{1}\d+$|\+|\-|\*|\^|/|%|\(|\)|(=>)|(>=)|(<=)|<[=]{0}|>[=]{0}|!=|;|,|let |={1,2}|function|if|else|!|\&|\||true|false|(\u0022([^\u0022\\]|\\.)*\u0022)|@|^[a-zA-Z]+\w*$");
+            Regex ValidTokens = new(@"^\d+$|^\d+[\.,]{1}\d+$|\+|\-|\*|\^|/|%|\(|\)|(=>)|(>=)|(<=)|<[=]{0}|>[=]{0}|!=|;|,|let |={1,2}|function|if|else|!|\&|\||true|false|(\u0022([^\u0022\\]|\\.)*\u0022)|@|^[a-zA-Z]+\w*$");
             
-            List<Match> t = AllTokens.Matches(input).ToList() ;
+            List<Match> AllTok = AllTokens.Matches(input).ToList() ;
             
             
             
-            foreach(Match m in t )
+            foreach(Match m in AllTok )
             {
-                if( GoodTokens.IsMatch (m.Value) )
+                if( ValidTokens.IsMatch (m.Value) )
                 {
                     Tokens.Add(m.Value) ;
                 }
@@ -72,7 +72,7 @@ namespace ProjectHulk
         {
             return Regex.IsMatch(Token , @"(\u0022([^\u0022\\]|\\.)*\u0022)") ? true : false ;
         }
-        public static bool IsBoolean(string Token)
+        public static bool IsBool(string Token)
         {
            return Regex.IsMatch(Token , @"^true$|^false$") ?  true : false ;
         }
@@ -90,7 +90,7 @@ namespace ProjectHulk
             {
                 return "string" ;
             }
-            else if(IsBoolean(Token))
+            else if(IsBool(Token))
             {
                 return "boolean" ;
             }
@@ -101,7 +101,7 @@ namespace ProjectHulk
             else 
             {
                 System.Console.WriteLine(Token);
-                return "error in code";
+                return "unexpected token"; //quitar luego
             }
         }
 
