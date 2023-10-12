@@ -3,12 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace ProjectHulk
 {
-    abstract class HulkErrors : Exception
+    abstract class SystemErrors : Exception
     {
         public abstract void PrintError();
     }
 
-    class LexicalError : HulkErrors
+    class LexicalError : SystemErrors
     {
         public string InvalidToken;
         public LexicalError(string BadToken)
@@ -23,43 +23,43 @@ namespace ProjectHulk
         }
     }
 
-    class SyntaxError : HulkErrors
+    class SyntaxError : SystemErrors
     {
+        public string ProblemKind;
         public string? Problem;
-        public string ProblemType;
-        public string? ExpressionType;
+        public string? ExpressionKind;
         public string Token;
 
         //diferentes constructores porque envío diferentes mensajes y no necesito todos los parametros
-        public SyntaxError(string Problem, string ProblemType, string ExpressionType, string Token)
+        public SyntaxError(string Problem, string ProblemKind, string ExpressionKind, string Token)
         {
             this.Problem = Problem;
-            this.ProblemType = ProblemType;
-            this.ExpressionType = ExpressionType;
+            this.ProblemKind = ProblemKind;
+            this.ExpressionKind = ExpressionKind;
             this.Token = Token;
         }
-        public SyntaxError(string Token, string ProblemType)
+        public SyntaxError(string Token, string ProblemKind)
         {
             this.Token = Token;
-            this.ProblemType = ProblemType;
+            this.ProblemKind = ProblemKind;
         }
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            if (ProblemType == "Missing Token")
+            if (ProblemKind == "Missing Token")
             {
-                System.Console.WriteLine($"! SYNTAX ERROR: {Problem} in '{ExpressionType}' expression after '{Token}' .");
+                System.Console.WriteLine($"! SYNTAX ERROR: {Problem} in '{ExpressionKind}' expression after '{Token}' .");
             }
-            else if (ProblemType == "Invalid Token")
+            else if (ProblemKind == "Invalid Token")
             {
-                System.Console.WriteLine($"! SYNTAX ERROR: {Problem} '{Token}' in '{ExpressionType}' expression");
+                System.Console.WriteLine($"! SYNTAX ERROR: {Problem} '{Token}' in '{ExpressionKind}' expression");
             }
-            else if (ProblemType == "DoNotExistID")
+            else if (ProblemKind == "DoNotExistID")
             {
                 System.Console.WriteLine($"! SYNTAX ERROR: The name '{Token}' doesn't exist in the current context");
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-            else if (ProblemType == "KeyWordID")
+            else if (ProblemKind == "KeyWordID")
             {
                 System.Console.WriteLine($"! SYNTAX ERROR: Invalid Id , the name '{Token}' it's a keyword from Hulk");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -68,67 +68,67 @@ namespace ProjectHulk
         }
     }
 
-    class SemanticError : HulkErrors
+    class SemanticError : SystemErrors
     {
-        public string? ProblemType;
+        public string? ProblemKind;
         public string? Problem;
-        public string? BadToken;
+        public string? InvalidToken;
         public string? ExpectedToken;
         public string? LeftToken;
         public string? RightToken;
 
 
         //diferentes constructores porque envío diferentes mensajes y no necesito todos los parametros
-        public SemanticError(string Problem, string ProblemType, string BadToken)
+        public SemanticError(string Problem, string ProblemKind, string InvalidToken)
         {
             this.Problem = Problem;
-            this.BadToken = BadToken;
-            this.ProblemType = ProblemType;
+            this.InvalidToken = InvalidToken;
+            this.ProblemKind = ProblemKind;
         }
-        public SemanticError(string Problem, string ProblemType, string LeftToken, string RightToken, string expectedToken, string BadToken)
+        public SemanticError(string Problem, string ProblemKind, string LeftToken, string RightToken, string expectedToken, string InvalidToken)
         {
             this.Problem = Problem;
             this.LeftToken = LeftToken;
             this.RightToken = RightToken;
-            this.ProblemType = ProblemType;
-            this.BadToken = BadToken;
+            this.ProblemKind = ProblemKind;
+            this.InvalidToken = InvalidToken;
             this.ExpectedToken = expectedToken;
         }
-        public SemanticError(string Problem, string ProblemType, string expectedToken, string BadToken)
+        public SemanticError(string Problem, string ProblemKind, string ExpectedToken, string InvalidToken)
         {
-            this.BadToken = BadToken;
+            this.InvalidToken = InvalidToken;
             this.Problem = Problem;
-            this.ExpectedToken = expectedToken;
-            this.ProblemType = ProblemType;
+            this.ExpectedToken = ExpectedToken;
+            this.ProblemKind = ProblemKind;
         }
-        public SemanticError(string BadToken, string ProblemType)
+        public SemanticError(string InvalidToken, string ProblemKind)
         {
-            this.BadToken = BadToken;
-            this.ProblemType = ProblemType;
+            this.InvalidToken = InvalidToken;
+            this.ProblemKind = ProblemKind;
         }
 
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            if (ProblemType == "Incorrect Operator")
+            if (ProblemKind == "Incorrect Operator")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR:{Problem} cannot be applied to operators of type '{BadToken}'");
+                System.Console.WriteLine($"SEMANTIC ERROR:{Problem} cannot be applied to operators of type '{InvalidToken}'");
             }
-            else if (ProblemType == "Incorrect Binary Expression")
+            else if (ProblemKind == "Incorrect Binary Expression")
             {
                 System.Console.WriteLine($"SEMANTIC ERROR: {Problem} cannot be used between '{LeftToken}' and '{RightToken}'");
             }
-            else if (ProblemType == "DuplicateArgument")
+            else if (ProblemKind == "DuplicateArgument")
             {
-                Console.WriteLine($"SEMANTIC ERROR: The parameter name '{BadToken}' already exist");
+                Console.WriteLine($"SEMANTIC ERROR: The parameter name '{InvalidToken}' already exist");
             }
-            else if (ProblemType == "StackOverflow")
+            else if (ProblemKind == "StackOverflow")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR: Stack OverFlow Function {BadToken}.");
+                System.Console.WriteLine($"SEMANTIC ERROR: Stack OverFlow Function {InvalidToken}.");
             }
-            else if (ProblemType == "ArgumentTypeError")
+            else if (ProblemKind == "ArgumentTypeError")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR: {Problem} receives `{ExpectedToken}`, not `{BadToken}`.");
+                System.Console.WriteLine($"SEMANTIC ERROR: {Problem} receives `{ExpectedToken}`, not `{InvalidToken}`.");
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -136,105 +136,105 @@ namespace ProjectHulk
 
     }
 
-    class FunctionsErrors : HulkErrors
+    class FunctionsErrors : SystemErrors
     {
-        public string functionName;
-        public string ProblemType;
-        public int? ArgumentsIdCount;
+        public string ProblemKind;
+        public string FunctionName;
+        public string? InvalidToken;
+        public string? ExpectedToken;
+        public int? ArgumentsNameCount;
         public int? ArgumentsValueCount;
-        public string? BadToken;
-        public string? expectedToken;
 
         //diferentes constructores porque envío diferentes mensajes y no necesito todos los parametros
-        public FunctionsErrors(string functionName, string ProblemType)
+        public FunctionsErrors(string FunctionName, string ProblemKind)
         {
-            this.functionName = functionName;
-            this.ProblemType = ProblemType;
+            this.ProblemKind = ProblemKind;
+            this.FunctionName = FunctionName;
         }
 
-        public FunctionsErrors(string functionName, string ProblemType, int ArgumentsIdCount, int ArgumentsValueCount)
+        public FunctionsErrors(string FunctionName, string ProblemKind, int ArgumentsNameCount, int ArgumentsValueCount)
         {
-            this.functionName = functionName;
-            this.ProblemType = ProblemType;
-            this.ArgumentsIdCount = ArgumentsIdCount;
+            this.ProblemKind = ProblemKind;
+            this.FunctionName = FunctionName;
+            this.ArgumentsNameCount = ArgumentsNameCount;
             this.ArgumentsValueCount = ArgumentsValueCount;
         }
 
-        public FunctionsErrors(string functionName, string ProblemType, string expectedToken, string BadToken)
+        public FunctionsErrors(string FunctionName, string ProblemKind, string ExpectedToken, string InvalidToken)
         {
-            this.functionName = functionName;
-            this.ProblemType = ProblemType;
-            this.expectedToken = expectedToken;
-            this.BadToken = BadToken;
+            this.ProblemKind = ProblemKind;
+            this.InvalidToken = InvalidToken;
+            this.FunctionName = FunctionName;
+            this.ExpectedToken = ExpectedToken;
         }
 
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            if (ProblemType == "StackOverflow")
+            if (ProblemKind == "StackOverflow")
             {
-                Console.WriteLine("FUNCTION ERROR: Stack Overflow " + functionName);
+                Console.WriteLine("FUNCTION ERROR: Stack Overflow " + FunctionName);
             }
-            else if (ProblemType == "ArgumentsCountError")
+            else if (ProblemKind == "ArgumentsCountError")
             {
-                System.Console.WriteLine($"FUNCTION ERROR: Function '{functionName}' receives {ArgumentsIdCount} argument/s, not {ArgumentsValueCount}.");
+                System.Console.WriteLine($"FUNCTION ERROR: Function '{FunctionName}' receives {ArgumentsNameCount} argument/s, not {ArgumentsValueCount}.");
             }
-            else if (ProblemType == "ArgumentTypeError")
+            else if (ProblemKind == "ArgumentTypeError")
             {
-                System.Console.WriteLine($"FUNCTION ERROR: Function '{functionName}' receives '{expectedToken}', not `{BadToken}`.");
+                System.Console.WriteLine($"FUNCTION ERROR: Function '{FunctionName}' receives '{ExpectedToken}', not `{InvalidToken}`.");
             }
-            else if (ProblemType == "DuplicateArgument")
+            else if (ProblemKind == "DuplicateArgument")
             {
-                Console.WriteLine($"FUNCTION ERROR: The parameter name '{BadToken}' already exist");
+                Console.WriteLine($"FUNCTION ERROR: The parameter name '{InvalidToken}' already exist");
             }
             Console.ForegroundColor = ConsoleColor.Green;
         }
     }
 
-    class UnexpectedTokenError : HulkErrors
+    class UnexpectedTokenError : SystemErrors
     {
-        public string BadToken;
-        public UnexpectedTokenError(string BadToken)
+        public string InvalidToken;
+        public UnexpectedTokenError(string InvalidToken)
         {
-            this.BadToken = BadToken;
+            this.InvalidToken = InvalidToken;
         }
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            System.Console.WriteLine($"! UNEXPECTED ERROR : Token '{BadToken}' wasn't expected");
+            System.Console.WriteLine($"! UNEXPECTED ERROR : Token '{InvalidToken}' wasn't expected");
             Console.ForegroundColor = ConsoleColor.Green;
         }
     }
 
-    class DefaultError : HulkErrors
+    class DefaultError : SystemErrors
     {
-        public string ProblemType;
-        public string? functionName;
+        public string ProblemKind;
+        public string? FunctionName;
 
         //diferentes constructores porque envío diferentes mensajes y no necesito todos los parametros
-        public DefaultError(string ProblemType)
+        public DefaultError(string ProblemKind)
         {
-            this.ProblemType = ProblemType;
+            this.ProblemKind = ProblemKind;
         }
-        public DefaultError(string ProblemType, string functionName)
+        public DefaultError(string ProblemKind, string FunctionName)
         {
-            this.ProblemType = ProblemType;
-            this.functionName = functionName;
+            this.ProblemKind = ProblemKind;
+            this.FunctionName = FunctionName;
         }
         public override void PrintError()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            if (ProblemType == "DivisionByZero")
+            if (ProblemKind == "DivisionByZero")
             {
                 System.Console.WriteLine("! DEFAULT ERROR: division by zero isn`t allowed");
             }
-            else if (ProblemType == "ErrorFunctionBody")
+            else if (ProblemKind == "ErrorFunctionBody")
             {
                 System.Console.WriteLine("! DEFAULT ERROR: Invalid Function Declaration.");
             }
-            else if (ProblemType == "StackOverflow")
+            else if (ProblemKind == "StackOverflow")
             {
-                Console.WriteLine("! DEFAULT ERROR: Stack Overflow " + functionName);
+                Console.WriteLine("! DEFAULT ERROR: Stack Overflow " + FunctionName);
             }
             Console.ForegroundColor = ConsoleColor.Green;
         }

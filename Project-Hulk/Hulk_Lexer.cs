@@ -19,16 +19,16 @@ namespace ProjectHulk
 																	  //con "," en windows y con "." en mac
 		public static int index = 0 ;
  
-        public static List<string> Key_Words  = new List<string>()
+        public static List<string> KeyWords  = new List<string>()
         {"print" , "let " , "in", "function" , "if" , "else" , "true" , "false" ,"sin" , "cos" , "sqrt" , "rand" , "exp" , "log" , "PI" , "E" };
        
 
 
         public static void Restart()
         {
-            foreach(string id in FunctionDeclaration.functionStack.Keys)
+            foreach(string id in FunctionDeclaration.FunctionStack.Keys)
             {
-                FunctionDeclaration.functionStack[id] = 0;
+                FunctionDeclaration.FunctionStack[id] = 0;
             }
             Prints.Clear();
             index = 0;
@@ -76,11 +76,11 @@ namespace ProjectHulk
         {
            return Regex.IsMatch(Token , @"^true$|^false$") ?  true : false ;
         }
-        public static bool IsID(string Token)
+        public static bool IsID(string Token) //nombre de variables y funciones
         {
             return Regex.IsMatch( Token , @"^[a-zA-Z]+\w*$") ? true : false ;
         }
-        public static string TokenType(string Token)
+        public static string KindOfToken(string Token)
         {
             if(IsNumber(Token))
             {
@@ -105,13 +105,13 @@ namespace ProjectHulk
             }
         }
 
-        public static string GetIncorrectToken(string a , string b , string expectedToken)
+        public static string GetInvalidToken(string a , string b , string expectedToken)
         {
             if(a != expectedToken )
             {
-                return TokenType(a) ;
+                return KindOfToken(a) ;
             }
-            else return TokenType(b) ;            
+            else return KindOfToken(b) ;            
         }
         
 

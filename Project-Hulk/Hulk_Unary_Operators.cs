@@ -2,12 +2,12 @@ using System.Data.SqlTypes;
 using System.Text.RegularExpressions ;
 namespace ProjectHulk
 {
-    class MathExpressions : Expression
+    class UnaryExpressions : Expression
     {
         public string mathExp ;
-        public static List<string> MathFunctions = new List<string>(){ "cos" , "sin" , "sqrt" , "exp" , "log" , "rand" , "PI" , "E"};
+        public static List<string> MathMethods = new List<string>(){ "cos" , "sin" , "sqrt" , "exp" , "log" , "rand" , "PI" , "E"};
         List<string> arguments = new List<string>();
-        public MathExpressions(string mathExp)
+        public UnaryExpressions(string mathExp)
         {
             this.mathExp = mathExp;
         }
@@ -24,26 +24,26 @@ namespace ProjectHulk
                 value = Convert.ToString(Math.E);
                 return ;
             }
-            if(ActualToken() == "(")
+            if(Current() == "(")
             {   
                 Next();
 
-                while(Lexer.index < Lexer.Tokens.Count && ActualToken() != ")")
+                while(Lexer.index < Lexer.Tokens.Count && Current() != ")")
                 {
                     Expression e = new BoolOperator();
                     e.Evaluate();
                     arguments.Add(e.value);
-                    if(ActualToken() == ",")
+                    if(Current() == ",")
                     {
                         Next();
                     }
-                    else if(ActualToken() == ")")
+                    else if(Current() == ")")
                     {
                         break ;
                     }
                     else throw new SyntaxError("Missing ' , '" , "Missing Token" , "Math function" , Lexer.Tokens[Lexer.index - 1]);
                 }
-                if(ActualToken() == ")")
+                if(Current() == ")")
                 {
                     if(mathExp == "sqrt")
                     {
@@ -77,7 +77,7 @@ namespace ProjectHulk
             else throw new SyntaxError("Missing ' ( '" , "Missing Token" , "Math function" , Lexer.Tokens[Lexer.index-1]);
         }
 
-        #region Methods
+        
         public void sqrt()
         {
             if(arguments.Count == 1)
@@ -87,7 +87,7 @@ namespace ProjectHulk
                     double result = Math.Sqrt(Convert.ToDouble(arguments[0]));
                     value = Convert.ToString(result);
                 }
-                else throw new FunctionsErrors("sqrt" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                else throw new FunctionsErrors("sqrt" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
             }
             else throw new FunctionsErrors("sqrt" , "ArgumentsCountError" , 1 , arguments.Count );
         }
@@ -100,7 +100,7 @@ namespace ProjectHulk
                     double result = Math.Sin(Convert.ToDouble(arguments[0]));
                     value = Convert.ToString(result);
                 }
-                else throw new FunctionsErrors("sin" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                else throw new FunctionsErrors("sin" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
             }
             else throw new FunctionsErrors("sin" , "ArgumentsCountError" , 1 , arguments.Count );
         }
@@ -113,7 +113,7 @@ namespace ProjectHulk
                     double result = Math.Cos(Convert.ToDouble(arguments[0]));
                     value = Convert.ToString(result);
                 }
-                else throw new FunctionsErrors("cos" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                else throw new FunctionsErrors("cos" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
             }
             else throw new FunctionsErrors("cos" , "ArgumentsCountError" , 1 , arguments.Count );
 
@@ -127,7 +127,7 @@ namespace ProjectHulk
                     double result = Math.Cos(Convert.ToDouble(arguments[0]));
                     value = Convert.ToString(result);
                 }
-                else throw new FunctionsErrors("exp" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                else throw new FunctionsErrors("exp" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
             }
             else throw new FunctionsErrors("exp" , "ArgumentsCountError" , 1 , arguments.Count );
         }
@@ -144,9 +144,9 @@ namespace ProjectHulk
                         double result = Math.Log(n , logBase);
                         value = Convert.ToString(result) ;
                     }
-                    else throw new FunctionsErrors("log" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                    else throw new FunctionsErrors("log" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
                 }
-                else throw new FunctionsErrors("log" , "ArgumentTypeError" , "number" , Lexer.TokenType(arguments[0]));
+                else throw new FunctionsErrors("log" , "ArgumentTypeError" , "number" , Lexer.KindOfToken(arguments[0]));
             }
             else throw new FunctionsErrors("log" , "ArgumentsCountError" , 2 , arguments.Count );
         }
@@ -169,7 +169,7 @@ namespace ProjectHulk
         {
             value = Convert.ToString(Math.E) ;
         }
-        #endregion 
+        
         
     }
 }

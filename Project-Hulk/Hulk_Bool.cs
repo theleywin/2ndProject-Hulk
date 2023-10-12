@@ -11,9 +11,9 @@ namespace ProjectHulk
         List<string> NextTokens = new List<string>(){")",";",",","in","else"};//Siguientes
         public BoolOperator()
         {
-            this.left = new Comparison();
+            this.left = new CompareOperations();
 
-            this.right = new Comparison();
+            this.right = new CompareOperations();
         }
         
         
@@ -43,21 +43,21 @@ namespace ProjectHulk
 
         public override void Evaluate()
         {
-            if(IsFunctionID(ActualToken())) LeftId = true ;
+            if(IsFunctionName(Current())) LeftId = true ;
 
             left.Evaluate();
 
             while(Lexer.index < Lexer.Tokens.Count)
             {
-                if(ActualToken() == "&")
+                if(Current() == "&")
                 {
                     Next();
 
-                    if(IsFunctionID( ActualToken() )) RightId = true ;
+                    if(IsFunctionName( Current() )) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == "boolean" && Lexer.TokenType(right.value) == "boolean")
+                    if(Lexer.KindOfToken(left.value) == "boolean" && Lexer.KindOfToken(right.value) == "boolean")
                     {
                         left.value = And(left.value , right.value);
                     }
@@ -65,28 +65,28 @@ namespace ProjectHulk
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "boolean")
+                            if(Lexer.KindOfToken(left.value) != "boolean")
                             {
-                                throw new SemanticError("Operator ' & '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' & '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "boolean")
+                            if(Lexer.KindOfToken(right.value) != "boolean")
                             {
-                                throw new SemanticError("Operator ' & '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' & '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' & '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.GetIncorrectToken(left.value , right.value , "boolean"));
+                        throw new SemanticError("Operator ' & '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.GetInvalidToken(left.value , right.value , "boolean"));
                     }
                 }
-                else if( ActualToken() == "|" )
+                else if( Current() == "|" )
                 {
                     Next();
-                    if(IsFunctionID(ActualToken())) RightId = true ;
+                    if(IsFunctionName(Current())) RightId = true ;
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == "boolean" && Lexer.TokenType(right.value) == "boolean")
+                    if(Lexer.KindOfToken(left.value) == "boolean" && Lexer.KindOfToken(right.value) == "boolean")
                     {
                         left.value = Or(left.value , right.value);
                     }
@@ -94,38 +94,38 @@ namespace ProjectHulk
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "boolean")
+                            if(Lexer.KindOfToken(left.value) != "boolean")
                             {
-                                throw new SemanticError("Operator ' | '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' | '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "boolean")
+                            if(Lexer.KindOfToken(right.value) != "boolean")
                             {
-                                throw new SemanticError("Operator ' | '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' | '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' | '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "boolean" , Lexer.GetIncorrectToken(left.value , right.value , "boolean"));
+                        throw new SemanticError("Operator ' | '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "boolean" , Lexer.GetInvalidToken(left.value , right.value , "boolean"));
                     }
                 }
-                else if(NextTokens.Contains(ActualToken()))
+                else if(NextTokens.Contains(Current()))
                 {
                     value = left.value;
                     break;
                 }
                 else 
                 {
-                    throw new UnexpectedTokenError(ActualToken());
+                    throw new UnexpectedTokenError(Current());
                 }
             }
         }
     }
 
-    class Comparison : BinaryExpressions //operadores de comparación "==" "!=" ">" "<" ">=" "<="
+    class CompareOperations : BinaryExpressions //operadores de comparación "==" "!=" ">" "<" ">=" "<="
     {
         List<string> NextTokens = new List<string>(){")",";",",","in","else","&","|"};
-        public Comparison()  //jerarquía
+        public CompareOperations()  //jerarquía
         {
             left = new SumExpression();
 
@@ -137,202 +137,202 @@ namespace ProjectHulk
         {
             return a == b ? "true" : "false";
         }
-        private static string Inequality(string a , string b)
+        private static string Different(string a , string b)
         {
             return a != b ? "true" : "false";
         }
-        private static string GreaterThan(string a , string b)
+        private static string Greater(string a , string b)
         {
             return double.Parse(a) > double.Parse(b) ? "true" : "false";
         }
-        private static string LessThan(string a , string b)
+        private static string Less(string a , string b)
         {
             return double.Parse(a) < double.Parse(b) ? "true" : "false";
         }
-        private static string GreaterThanOrEqual(string a , string b)
+        private static string GreaterOrEqual(string a , string b)
         {
             return double.Parse(a) >= double.Parse(b) ? "true" : "false";
         }
-        private static string LessThanOrEqual(string a , string b)
+        private static string LessOrEqual(string a , string b)
         {
             return double.Parse(a) <= double.Parse(b) ? "true" : "false";
         }
 
         public override void Evaluate()
         {   
-            if(IsFunctionID( ActualToken() )) LeftId = true ;
+            if(IsFunctionName( Current() )) LeftId = true ;
 
             left.Evaluate();
 
             while(Lexer.index < Lexer.Tokens.Count)
             {
-                if( ActualToken() == ">" )
+                if( Current() == ">" )
                 {
                     Next();
 
-                    if(IsFunctionID( ActualToken() )) RightId = true ;
+                    if(IsFunctionName( Current() )) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == "number" && Lexer.TokenType(right.value) == "number")
+                    if(Lexer.KindOfToken(left.value) == "number" && Lexer.KindOfToken(right.value) == "number")
                     {
-                        left.value = GreaterThan(left.value , right.value);
+                        left.value = Greater(left.value , right.value);
                     }
                     else 
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "number")
+                            if(Lexer.KindOfToken(left.value) != "number")
                             {
-                                throw new SemanticError("Operator ' > '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' > '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "number")
+                            if(Lexer.KindOfToken(right.value) != "number")
                             {
-                                throw new SemanticError("Operator ' > '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' > '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' > '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' > '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                         
                     }
                 }
-                else if( ActualToken() == "<" )
+                else if( Current() == "<" )
                 {
                     Next();
 
-                    if(IsFunctionID(ActualToken())) RightId = true ;
+                    if(IsFunctionName(Current())) RightId = true ;
 
                     right.Evaluate();
                    
-                    if(Lexer.TokenType(left.value) == "number" && Lexer.TokenType(right.value) == "number")
+                    if(Lexer.KindOfToken(left.value) == "number" && Lexer.KindOfToken(right.value) == "number")
                     {
-                        left.value = LessThan(left.value , right.value);
+                        left.value = Less(left.value , right.value);
                     }
                     else 
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "number")
+                            if(Lexer.KindOfToken(left.value) != "number")
                             {
-                                throw new SemanticError("Operator ' < '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' < '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "number")
+                            if(Lexer.KindOfToken(right.value) != "number")
                             {
-                                throw new SemanticError("Operator ' < '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' < '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' < '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' < '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                     }
                 }
-                else if( ActualToken() == "<=" )
+                else if( Current() == "<=" )
                 {
                     Next();
 
-                    if(IsFunctionID( ActualToken() )) RightId = true ;
+                    if(IsFunctionName( Current() )) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == "number" && Lexer.TokenType(right.value) == "number")
+                    if(Lexer.KindOfToken(left.value) == "number" && Lexer.KindOfToken(right.value) == "number")
                     {
-                        left.value = LessThanOrEqual(left.value , right.value);
+                        left.value = LessOrEqual(left.value , right.value);
                     }
                     else 
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "number")
+                            if(Lexer.KindOfToken(left.value) != "number")
                             {
-                                throw new SemanticError("Operator ' <= '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' <= '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "number")
+                            if(Lexer.KindOfToken(right.value) != "number")
                             {
-                                throw new SemanticError("Operator ' <= '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' <= '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' <= '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' <= '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                     }
                 }
-                else if( ActualToken() == ">=" )
+                else if( Current() == ">=" )
                 {
                     Next();
 
-                    if(IsFunctionID( ActualToken() )) RightId = true ;
+                    if(IsFunctionName( Current() )) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == "number" && Lexer.TokenType(right.value) == "number")
+                    if(Lexer.KindOfToken(left.value) == "number" && Lexer.KindOfToken(right.value) == "number")
                     {
-                        left.value = GreaterThanOrEqual(left.value , right.value);
+                        left.value = GreaterOrEqual(left.value , right.value);
                     }
                     else 
                     {
                         if(LeftId)
                         {
-                            if(Lexer.TokenType(left.value) != "number")
+                            if(Lexer.KindOfToken(left.value) != "number")
                             {
-                                throw new SemanticError("Operator ' >= '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(left.value) );
+                                throw new SemanticError("Operator ' >= '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(left.value) );
                             }
                         }
                         else if(RightId)
                         {
-                            if(Lexer.TokenType(right.value) != "number")
+                            if(Lexer.KindOfToken(right.value) != "number")
                             {
-                                throw new SemanticError("Operator ' >= '" , "ArgumentTypeError" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.TokenType(right.value) );
+                                throw new SemanticError("Operator ' >= '" , "ArgumentTypeError" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.KindOfToken(right.value) );
                             }
                         }
-                        throw new SemanticError("Operator ' >= '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' >= '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                     }
                 }
-                else if( ActualToken() == "==" )
+                else if( Current() == "==" )
                 {
                     Next();
 
-                    if(IsFunctionID(ActualToken())) RightId = true ;
+                    if(IsFunctionName(Current())) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == Lexer.TokenType(right.value))
+                    if(Lexer.KindOfToken(left.value) == Lexer.KindOfToken(right.value))
                     {
                         left.value = Equals(left.value , right.value);
                     }
                     else
                     {
-                        throw new SemanticError("Operator ' == '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' == '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                     }
                 }
-                else if( ActualToken() == "!=" )
+                else if( Current() == "!=" )
                 {
                     Next();
 
-                    if(IsFunctionID(ActualToken())) RightId = true ;
+                    if(IsFunctionName(Current())) RightId = true ;
 
                     right.Evaluate();
                     
-                    if(Lexer.TokenType(left.value) == Lexer.TokenType(right.value))
+                    if(Lexer.KindOfToken(left.value) == Lexer.KindOfToken(right.value))
                     {
-                        left.value = Inequality(left.value , right.value);
+                        left.value = Different(left.value , right.value);
                     }
                     else
                     {
-                        throw new SemanticError("Operator ' != '" , "Incorrect Binary Expression" , Lexer.TokenType(left.value) , Lexer.TokenType(right.value) , "number" , Lexer.GetIncorrectToken(left.value , right.value , "number"));
+                        throw new SemanticError("Operator ' != '" , "Incorrect Binary Expression" , Lexer.KindOfToken(left.value) , Lexer.KindOfToken(right.value) , "number" , Lexer.GetInvalidToken(left.value , right.value , "number"));
                     }
                 }
-                else if (NextTokens.Contains(ActualToken()))
+                else if (NextTokens.Contains(Current()))
                 {
                     value = left.value ;
                     break;
                 }
                 else 
                 {
-                    throw new UnexpectedTokenError(ActualToken());
+                    throw new UnexpectedTokenError(Current());
                 }
             } 
         }

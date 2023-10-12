@@ -9,22 +9,22 @@ namespace ProjectHulk
 {
 	class FunctionDeclaration : Expression
 	{
-		public static Dictionary<string, FunctionCall> functionStore = new Dictionary<string, FunctionCall>();
-		public static Dictionary<string, int> functionStack = new Dictionary<string, int>();
-		public List<string> functionArguments = new List<string>();
+		public static Dictionary<string, FunctionCall> FunctionStore = new Dictionary<string, FunctionCall>();
+		public static Dictionary<string, int> FunctionStack = new Dictionary<string, int>();
+		public List<string> FunctionArguments = new List<string>();
 
 		public override void Evaluate()
 		{
-			List<string> functionExpression = new List<string>();
+			List<string> FunctionExpression = new List<string>();
 
 			if (Lexer.IsID(Current()))
 			{
-				if (Lexer.Key_Words.Contains(Current()))
+				if (Lexer.KeyWords.Contains(Current()))
 				{
 					throw new SyntaxError(Current(), "KeyWordID");
 				}
 
-				string functionId = Current();
+				string functionName = Current();
 				Next();
 				if (Current() == "(")
 				{
@@ -34,9 +34,9 @@ namespace ProjectHulk
 					{
 						if (Lexer.IsID(Current()))
 						{
-							if (!functionArguments.Contains(Current()))
+							if (!FunctionArguments.Contains(Current()))
 							{
-								functionArguments.Add(Current());
+								FunctionArguments.Add(Current());
 								Next();
 							}
 							else
@@ -62,31 +62,31 @@ namespace ProjectHulk
 							Next();
 							while (Current() != ";" && Lexer.index < Lexer.Tokens.Count)
 							{
-								if (Lexer.IsID(Current()) && !Lexer.Key_Words.Contains(Current()) &&
-									!functionArguments.Contains(Current()) && Current() != functionId && 
-									!functionStore.ContainsKey(Current()) && !Let_in.idStore.ContainsKey(Current()))
+								if (Lexer.IsID(Current()) && !Lexer.KeyWords.Contains(Current()) &&
+									!FunctionArguments.Contains(Current()) && Current() != functionName && 
+									!FunctionStore.ContainsKey(Current()) && !Let_in.StoreOfNames.ContainsKey(Current()))
 								
 								{
 									throw new SyntaxError(Current(), "DoNotExistID");
 								}
-								functionExpression.Add(Current());
+								FunctionExpression.Add(Current());
 								Next();
 							}
 
 							if (Lexer.index < Lexer.Tokens.Count && Current() == ";")
 							{
-								functionExpression.Add(Current());
+								FunctionExpression.Add(Current());
 							}
 							else return;
 
-							if (functionStore.ContainsKey(functionId))
+							if (FunctionStore.ContainsKey(functionName))
 							{
-								functionStore[functionId] = new FunctionCall(functionArguments, functionExpression, functionId);
+								FunctionStore[functionName] = new FunctionCall(FunctionArguments, FunctionExpression, functionName);
 							}
 							else
 							{
-								functionStore.Add(functionId, new FunctionCall(functionArguments, functionExpression, functionId));
-								functionStack.Add(functionId, 0);
+								FunctionStore.Add(functionName, new FunctionCall(FunctionArguments, FunctionExpression, functionName));
+								FunctionStack.Add(functionName, 0);
 							}
 						}
 						else

@@ -63,7 +63,7 @@ namespace ProjectHulk
 						}
 					}
 				}
-				catch (HulkErrors he)
+				catch (SystemErrors he)
 				{
 					he.PrintError();
 				}

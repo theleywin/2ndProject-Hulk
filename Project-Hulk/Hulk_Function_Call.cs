@@ -4,25 +4,25 @@ namespace ProjectHulk
 {
 	class FunctionCall : Expression
     {
-        private string functionName ;
-        public List<string> argumentsId = new List<string>();
-        public List<string> argumentsValue = new List<string>();
-        public List<string> functionExpression = new List<string>();
-        public static Dictionary<string , string > functionsId = new Dictionary<string, string>();
+        private string FunctionName ;
+        public List<string> ArgumentsName = new List<string>();
+        public List<string> ArgumentsValue = new List<string>();
+        public List<string> FunctionExpression = new List<string>();
+        public static Dictionary<string , string > FunctionNames = new Dictionary<string, string>();
 
-        public FunctionCall(List<string> argumentsId , List<string> functionExpression , string functionName)
+        public FunctionCall(List<string> ArgumentsName , List<string> FunctionExpression , string FunctionName)
         {
-            this.argumentsId = argumentsId ;
-            this.functionExpression = functionExpression;
-            this.functionName = functionName;
+            this.ArgumentsName = ArgumentsName ;
+            this.FunctionExpression = FunctionExpression;
+            this.FunctionName = FunctionName;
         }
         public override void Evaluate()
         {
-            if(FunctionDeclaration.functionStack[functionName] > 500)
+            if(FunctionDeclaration.FunctionStack[FunctionName] > 500)
             {   
-                throw new FunctionsErrors(functionName , "StackOverflow");
+                throw new FunctionsErrors(FunctionName , "StackOverflow");
             }
-            else FunctionDeclaration.functionStack[functionName]++;
+            else FunctionDeclaration.FunctionStack[FunctionName]++;
 
             if(Current() == "(")
             {
@@ -31,89 +31,89 @@ namespace ProjectHulk
 
                 Expression parameter = new BoolOperator();
 
-                argumentsValue.Clear();
+                ArgumentsValue.Clear();
 
-                Dictionary<string , string> Original_values = new Dictionary<string, string>();
+                Dictionary<string , string> OriginalValues = new Dictionary<string, string>();
                 while(Lexer.index < Lexer.Tokens.Count && Current() != ")")
                 {
                     parameter.Evaluate();
-                    argumentsValue.Add(parameter.value);
+                    ArgumentsValue.Add(parameter.value);
                     if(Current() != ",")
                     {
                         break;
                     }
                     else Next();
                 }
-                if(argumentsId.Count == argumentsValue.Count)
+                if(ArgumentsName.Count == ArgumentsValue.Count)
                 {
-                    for(int i = 0 ; i < argumentsId.Count ; i++)
+                    for(int i = 0 ; i < ArgumentsName.Count ; i++)
                     {
-                        if(functionsId.ContainsKey(argumentsId[i]))
+                        if(FunctionNames.ContainsKey(ArgumentsName[i]))
                         {
-                            Original_values.Add(argumentsId[i] , functionsId[argumentsId[i]]);
+                            OriginalValues.Add(ArgumentsName[i] , FunctionNames[ArgumentsName[i]]);
                             //Actualiza
-                            functionsId[argumentsId[i]] = argumentsValue[i];
+                            FunctionNames[ArgumentsName[i]] = ArgumentsValue[i];
                         }
                         else
                         {
-                            functionsId.Add(argumentsId[i] , argumentsValue[i]);
+                            FunctionNames.Add(ArgumentsName[i] , ArgumentsValue[i]);
                         }
                     }
                 }
                 else 
                 {
-                    throw new FunctionsErrors(functionName , "ArgumentsCountError", argumentsId.Count , argumentsValue.Count );
+                    throw new FunctionsErrors(FunctionName , "ArgumentsCountError", ArgumentsName.Count , ArgumentsValue.Count );
                 }
                 
-                List<string> originalsTokens = Lexer.Tokens;
-                int originalIndex = Lexer.index;
+                List<string> OriginalsTokens = Lexer.Tokens;
+                int OriginalIndex = Lexer.index;
 
-                Lexer.Tokens = functionExpression;
+                Lexer.Tokens = FunctionExpression;
                 Lexer.index = 0;
 
-                Expression FE = new BoolOperator();
+                Expression F_errors = new BoolOperator();
                 
                 try
                 {
-                    FE.Evaluate();
+                    F_errors.Evaluate();
                 }
-                catch(SemanticError se)//Catch argument type error
+                catch(SemanticError S_errors)
                 {
-                    Lexer.Tokens = originalsTokens;
-                    Lexer.index = originalIndex;
-                    if(se.ProblemType == "ArgumentTypeError")
+                    Lexer.Tokens = OriginalsTokens;
+                    Lexer.index = OriginalIndex;
+                    if(S_errors.ProblemKind == "ArgumentTypeError")
                     {
-                        throw new FunctionsErrors( functionName , "ArgumentTypeError" , se.ExpectedToken , se.BadToken);
+                        throw new FunctionsErrors( FunctionName , "ArgumentTypeError" , S_errors.ExpectedToken , S_errors.InvalidToken);
                     }
-                    else throw se ;
+                    else throw S_errors ;
                 }
-                catch(HulkErrors he)
+                catch(SystemErrors ST_errors)
                 {
-                    Lexer.Tokens = originalsTokens;
-                    Lexer.index = originalIndex;
-                    throw he;
+                    Lexer.Tokens = OriginalsTokens;
+                    Lexer.index = OriginalIndex;
+                    throw ST_errors;
                 }
                 
                
                 
-                Lexer.Tokens = originalsTokens;
-                Lexer.index = originalIndex;
+                Lexer.Tokens = OriginalsTokens;
+                Lexer.index = OriginalIndex;
 
-                foreach(string s in functionsId.Keys)
+                foreach(string s in FunctionNames.Keys)
                 {
-                    if(Original_values.ContainsKey(s))
+                    if(OriginalValues.ContainsKey(s))
                     {
-                        functionsId[s] = Original_values[s];
+                        FunctionNames[s] = OriginalValues[s];
                     }
                 }
 
                 if(Current() == ")")
                 {
-                    value = FE.value ;
+                    value = F_errors.value ;
                    // Console.WriteLine(  value);
                     Next();
-                    argumentsValue.Clear();
-                    FunctionDeclaration.functionStack[functionName]--;
+                    ArgumentsValue.Clear();
+                    FunctionDeclaration.FunctionStack[FunctionName]--;
                 }
                 else 
                 {
@@ -138,21 +138,21 @@ namespace ProjectHulk
                     return;
                 }
 
-                Expression printExp = new BoolOperator();
-                printExp.Evaluate();
+                Expression PrintExpression = new BoolOperator();
+                PrintExpression.Evaluate();
 
                 if(Current() == ")")
                 {
                     Next();
-                    if(Lexer.IsString(printExp.value))
+                    if(Lexer.IsString(PrintExpression.value))
                     {
-                        Lexer.Prints.Add(printExp.value.Substring( 1 , printExp.value.Length - 2));
+                        Lexer.Prints.Add(PrintExpression.value.Substring( 1 , PrintExpression.value.Length - 2));
                     }
                     else 
                     {
-                        Lexer.Prints.Add(printExp.value);
+                        Lexer.Prints.Add(PrintExpression.value);
                     }
-                    value = printExp.value;
+                    value = PrintExpression.value;
                 }
                 else
                 {

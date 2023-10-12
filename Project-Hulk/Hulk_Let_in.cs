@@ -2,28 +2,28 @@ using System.Text.RegularExpressions;
 
 namespace ProjectHulk
 {
-    class Let_in : Expression
+	class Let_in : Expression
     {
-        public static Dictionary< string , string> idStore = new Dictionary<string, string>();
+        public static Dictionary< string , string> StoreOfNames = new Dictionary<string, string>();
 
         public override void Evaluate()
         {
             while(Lexer.index < Lexer.Tokens.Count)
             {
-                if(Lexer.IsID(ActualToken()))
+                if(Lexer.IsID(Current()))
                 {
-                    if(Lexer.Key_Words.Contains(ActualToken()))
+                    if(Lexer.KeyWords.Contains(Current()))
                     {
-                        throw new SyntaxError(ActualToken() , "KeyWordID" );
+                        throw new SyntaxError(Current() , "KeyWordID" );
                     }
 
-                    string id = ActualToken();
+                    string name = Current();
                     Next();
 
-                    if(ActualToken() == "=")
+                    if(Current() == "=")
                     {
                         Next();
-                        if(ActualToken() == "in" || ActualToken() == ",")
+                        if(Current() == "in" || Current() == ",")
                         {
                             throw new SyntaxError("Missing Expression" ,  "Missing Token" , "let-in" , $"variable {Lexer.Tokens[Lexer.index - 2]}" );
                         }
@@ -31,17 +31,17 @@ namespace ProjectHulk
                         Expression Value = new BoolOperator();
                         Value.Evaluate();
                             
-                        string idValue = Value.value;
+                        string NameValue = Value.value;
 
-                        if(idStore.ContainsKey(id))
+                        if(StoreOfNames.ContainsKey(name))
                         {
-                            idStore[id] = idValue;
+                            StoreOfNames[name] = NameValue;
                         }
-                        else if(FunctionCall.functionsId.ContainsKey(id))
+                        else if(FunctionCall.FunctionNames.ContainsKey(name))
                         {
-                            FunctionCall.functionsId[id] = idValue;
+                            FunctionCall.FunctionNames[name] = NameValue;
                         }
-                        else idStore.Add(id , idValue );
+                        else StoreOfNames.Add(name , NameValue );
                             
                     }
                     else
@@ -54,37 +54,37 @@ namespace ProjectHulk
                     throw new SyntaxError("Missing ID" , "Missing Token" , "let-in" , Lexer.Tokens[Lexer.index - 1]);
                 }            
 
-                if(ActualToken() == ",")
+                if(Current() == ",")
                 {
                     Next();
                 }
-                else if(ActualToken() == "in")
+                else if(Current() == "in")
                 {
                     Next();
                     break;
                 }
-                else if (Regex.IsMatch(ActualToken() , @"^[a-zA-Z]+\w*$"))
+                else if (Regex.IsMatch(Current() , @"^[a-zA-Z]+\w*$"))
                 {
                     throw new SyntaxError("Missing ' , '" , "Missing Token" , "let_in" , Lexer.Tokens[Lexer.index - 1]);
                 }
                 else 
                 {
-                    throw new SyntaxError("Invalid Token" , "Invalid Token" , "let-in" , ActualToken());
+                    throw new SyntaxError("Invalid Token" , "Invalid Token" , "let-in" , Current());
                 }
 
             }    
 
             bool parenthesis = false;
-            if(ActualToken() == "(")
+            if(Current() == "(")
             {
                 Lexer.index++;
                 parenthesis = true ;
             }
         
-            Expression letInExp = new BoolOperator();
-            letInExp.Evaluate();
+            Expression LetInExpression = new BoolOperator();
+            LetInExpression.Evaluate();
 
-            string result = letInExp.value ;
+            string result = LetInExpression.value ;
            
             if(result == null)
             {
@@ -93,11 +93,11 @@ namespace ProjectHulk
 
             if(parenthesis)
             {
-                if(ActualToken() == ")")
+                if(Current() == ")")
                 {
                     Lexer.index++;
                     value = result;
-                    idStore.Clear();
+                    StoreOfNames.Clear();
                 }
                 else 
                 {
@@ -107,7 +107,7 @@ namespace ProjectHulk
             else
             {
                 value = result;
-                idStore.Clear();
+                StoreOfNames.Clear();
             }
         }  
     }

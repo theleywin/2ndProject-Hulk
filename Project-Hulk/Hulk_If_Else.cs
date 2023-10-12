@@ -6,48 +6,48 @@ namespace ProjectHulk
     {
         public override void Evaluate()
         {
-            if( ActualToken() == "(" )
+            if(Current() == "(" )
             {
                 Next();
 
-                Expression booleanExpression = new BoolOperator();
-                booleanExpression.Evaluate();
+                Expression BoolExpression = new BoolOperator();
+                BoolExpression.Evaluate();
 
-                if( ActualToken() == ")" )
+                if(Current() == ")" )
                 {
                     Next();
             
-                    if(booleanExpression.value == "true")
+                    if(BoolExpression.value == "true")
                     {
 
-                        Expression trueExp = new BoolOperator();
-                        trueExp.Evaluate();
+                        Expression TrueExpression = new BoolOperator();
+                        TrueExpression.Evaluate();
                         
-                        if(ActualToken() == "else")
+                        if(Current() == "else")
                         {
-                            value = trueExp.value ;
+                            value = TrueExpression.value ;
                             
-                            while(Lexer.index < Lexer.Tokens.Count - 1 && ActualToken() != ";" )
+                            while(Lexer.index < Lexer.Tokens.Count - 1 && Current() != ";" )
                             {
                                 Next();
                             }
                         }
                         else throw new SyntaxError("Missing ' else ' " , "Missing Token" , "if-else" , Lexer.Tokens[Lexer.index - 1]);
                     }
-                    else if(booleanExpression.value == "false")
+                    else if(BoolExpression.value == "false")
                     {
-                        while(Lexer.index < Lexer.Tokens.Count - 1  && ActualToken() != "else" ) 
+                        while(Lexer.index < Lexer.Tokens.Count - 1  && Current() != "else" ) 
                         {
                             Next();
                         }
-                        if(ActualToken() == "else")
+                        if(Current() == "else")
                         {
                             Next();
 
-                            Expression falseExp = new BoolOperator();
-                            falseExp.Evaluate(); 
+                            Expression FalseExpression = new BoolOperator();
+                            FalseExpression.Evaluate(); 
 
-                            value = falseExp.value ;
+                            value = FalseExpression.value ;
                         }
                     }
                 }
