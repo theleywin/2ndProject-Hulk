@@ -11,9 +11,9 @@ namespace Project_Hulk
     class LexicalError : SystemErrors
     {
         public string InvalidToken;
-        public LexicalError(string BadToken)
+        public LexicalError(string InvalidToken)
         {
-            this.InvalidToken = BadToken;
+            this.InvalidToken = InvalidToken;
         }
         public override void PrintError()
         {
@@ -112,23 +112,23 @@ namespace Project_Hulk
             Console.ForegroundColor = ConsoleColor.Red;
             if (ProblemKind == "Incorrect Operator")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR:{Problem} cannot be applied to operators of type '{InvalidToken}'");
+                System.Console.WriteLine($"! SEMANTIC ERROR:{Problem} cannot be applied to operators of type '{InvalidToken}'");
             }
             else if (ProblemKind == "Incorrect Binary Expression")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR: {Problem} cannot be used between '{LeftToken}' and '{RightToken}'");
+                System.Console.WriteLine($"! SEMANTIC ERROR: {Problem} cannot be used between '{LeftToken}' and '{RightToken}'");
             }
             else if (ProblemKind == "DuplicateArgument")
             {
-                Console.WriteLine($"SEMANTIC ERROR: The parameter name '{InvalidToken}' already exist");
+                Console.WriteLine($"! SEMANTIC ERROR: The parameter name '{InvalidToken}' already exist");
             }
             else if (ProblemKind == "StackOverflow")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR: Stack OverFlow Function {InvalidToken}.");
+                System.Console.WriteLine($"! SEMANTIC ERROR: Stack OverFlow Function {InvalidToken}.");
             }
             else if (ProblemKind == "ArgumentTypeError")
             {
-                System.Console.WriteLine($"SEMANTIC ERROR: {Problem} receives `{ExpectedToken}`, not `{InvalidToken}`.");
+                System.Console.WriteLine($"! SEMANTIC ERROR: {Problem} receives `{ExpectedToken}`, not `{InvalidToken}`.");
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -173,19 +173,19 @@ namespace Project_Hulk
             Console.ForegroundColor = ConsoleColor.Red;
             if (ProblemKind == "StackOverflow")
             {
-                Console.WriteLine("FUNCTION ERROR: Stack Overflow " + FunctionName);
+                Console.WriteLine("! FUNCTION ERROR: Stack Overflow " + FunctionName);
             }
             else if (ProblemKind == "ArgumentsCountError")
             {
-                System.Console.WriteLine($"FUNCTION ERROR: Function '{FunctionName}' receives {ArgumentsNameCount} argument/s, not {ArgumentsValueCount}.");
+                System.Console.WriteLine($"! FUNCTION ERROR: Function '{FunctionName}' receives {ArgumentsNameCount} argument/s, not {ArgumentsValueCount}.");
             }
             else if (ProblemKind == "ArgumentTypeError")
             {
-                System.Console.WriteLine($"FUNCTION ERROR: Function '{FunctionName}' receives '{ExpectedToken}', not `{InvalidToken}`.");
+                System.Console.WriteLine($"! FUNCTION ERROR: Function '{FunctionName}' receives '{ExpectedToken}', not `{InvalidToken}`.");
             }
             else if (ProblemKind == "DuplicateArgument")
             {
-                Console.WriteLine($"FUNCTION ERROR: The parameter name '{InvalidToken}' already exist");
+                Console.WriteLine($"! FUNCTION ERROR: The parameter name '{InvalidToken}' already exist");
             }
             Console.ForegroundColor = ConsoleColor.Green;
         }
@@ -234,7 +234,11 @@ namespace Project_Hulk
             }
             else if (ProblemKind == "StackOverflow")
             {
-                Console.WriteLine("! DEFAULT ERROR: Stack Overflow " + FunctionName);
+                Console.WriteLine("! DEFAULT ERROR: Stack Overflow on function" + FunctionName);
+            }
+            else if(ProblemKind == "NotABool")
+            {
+                Console.WriteLine("! DEFAULT ERROR: Invalid expression in an If-Else statement.");
             }
             Console.ForegroundColor = ConsoleColor.Green;
         }

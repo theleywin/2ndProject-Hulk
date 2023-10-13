@@ -9,10 +9,14 @@ namespace Project_Hulk
             if(Current() == "(" )
             {
                 Next();
-
+                
                 Expression BoolExpression = new BoolOperator();
                 BoolExpression.Evaluate();
-
+                
+                if(!Lexer.IsBool(Current()))
+                {
+                    throw new DefaultError("NotABool");
+                }
                 if(Current() == ")" )
                 {
                     Next();
