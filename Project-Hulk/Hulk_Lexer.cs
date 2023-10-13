@@ -20,10 +20,8 @@ namespace Project_Hulk
 		public static int index = 0 ;
  
         public static List<string> KeyWords  = new List<string>()
-        {"print" , "let " , "in", "function" , "if" , "else" , "true" , "false" ,"sin" , "cos" , "sqrt" , "rand" , "exp" , "log" , "PI" , "E" };
+        {"print" ,"let " ,"in","function" ,"if" ,"else" ,"true" ,"false" ,"sin" ,"cos" ,"sqrt" ,"rand" ,"exp" ,"log" ,"PI" ,"E", "NaN" };
        
-
-
         public static void Restart()
         {
             foreach(string id in FunctionDeclaration.FunctionStack.Keys)
@@ -61,11 +59,11 @@ namespace Project_Hulk
         {
             if (separator == ".") 
             {
-                return Regex.IsMatch(Token, @"^-{0,1}\d+$|^-{0,1}\d+\.{1}\d+E(\+|-)\d+$|^∞$|^-{0,1}\d+\.{1}\d+$") || Token == Convert.ToString(double.IsPositiveInfinity) ? true : false;
+                return Regex.IsMatch(Token, @"^-{0,1}\d+$|^-{0,1}\d+\.{1}\d+E(\+|-)\d+$|^∞$|^-{0,1}\d+\.{1}\d+$|^NaN$") || Token == Convert.ToString(double.IsPositiveInfinity) ? true : false;
             }
             else
             {
-				return Regex.IsMatch(Token, @"^-{0,1}\d+$|^-{0,1}\d+,{1}\d+E(\+|-)\d+$|^∞$|^-{0,1}\d+,{1}\d+$") || Token == Convert.ToString(double.IsPositiveInfinity) ? true : false;
+				return Regex.IsMatch(Token, @"^-{0,1}\d+$|^-{0,1}\d+,{1}\d+E(\+|-)\d+$|^∞$|^-{0,1}\d+,{1}\d+$|^NaN$") || Token == Convert.ToString(double.IsPositiveInfinity) ? true : false;
 			}
         }
         public static bool IsString(string Token)

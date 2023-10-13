@@ -13,7 +13,7 @@ namespace Project_Hulk
                 Expression BoolExpression = new BoolOperator();
                 BoolExpression.Evaluate();
                 
-                if(!Lexer.IsBool(Current()))
+                if(!Lexer.IsBool(BoolExpression.value))
                 {
                     throw new DefaultError("NotABool");
                 }

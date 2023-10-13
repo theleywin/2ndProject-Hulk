@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Project-Hulk")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3df0752ca49c8aa63d3733e08c02cc9372753911")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+baae422d62c83fb0eca3afd1de7b5df90c940e94")]
 [assembly: System.Reflection.AssemblyProductAttribute("Project-Hulk")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Project-Hulk")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
