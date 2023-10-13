@@ -2,12 +2,12 @@ using System.Data.SqlTypes;
 using System.Text.RegularExpressions ;
 namespace Project_Hulk
 {
-    class UnaryExpressions : Expression
+    class TrigoMathicsExpressions : Expression
     {
         public string mathExp ;
         public static List<string> MathMethods = new List<string>(){ "cos" , "sin" , "sqrt" , "exp" , "log" , "rand" , "PI" , "E"};
         List<string> arguments = new List<string>();
-        public UnaryExpressions(string mathExp)
+        public TrigoMathicsExpressions(string mathExp)
         {
             this.mathExp = mathExp;
         }

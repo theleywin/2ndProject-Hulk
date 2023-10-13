@@ -103,9 +103,9 @@ namespace Project_Hulk
                 p.Evaluate();
                 value = p.value;
             }
-            else if (Lexer.index < Lexer.Tokens.Count && UnaryExpressions.MathMethods.Contains(Current())) // Math function expression
+            else if (Lexer.index < Lexer.Tokens.Count && TrigoMathicsExpressions.MathMethods.Contains(Current())) // Math function expression
             {
-                Expression M = new UnaryExpressions(Current());
+                Expression M = new TrigoMathicsExpressions(Current());
                 Next();
                 M.Evaluate();
                 value = M.value;
