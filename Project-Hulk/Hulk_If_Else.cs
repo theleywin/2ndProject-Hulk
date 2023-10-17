@@ -31,7 +31,7 @@ namespace Project_Hulk
                         {
                             value = TrueExpression.value ;
                             
-                            while(Lexer.index < Lexer.Tokens.Count - 1 && Current() != ";" )
+                            while(Lexer.index < Lexer.Tokens.Count - 1 && Current() != ";" && Current() != ")")
                             {
                                 Next();
                             }
