@@ -8,6 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Project_Hulk
-build_property.ProjectDir = C:\Users\PGV\source\repos\Project-Hulk\Project-Hulk\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = /Users/pablogomezvidal/Desktop/Codes/projects/H.U.L.K/2ndProject-Hulk/Project-Hulk/
