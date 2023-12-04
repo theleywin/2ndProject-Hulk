@@ -19,7 +19,7 @@ namespace Project_Hulk
 			#endregion
 			
 			
-			int debugg = 0;
+		//	int debugg = 0;
 			
 
             while (true)
@@ -27,7 +27,7 @@ namespace Project_Hulk
 				Lexer.Restart();//limpia el imput y reinicia el indice 
 				Console.Write("> ");
 
-				string input= Console.ReadLine();
+				string? input= Console.ReadLine();
 
 				if (input == null) continue;
 
@@ -51,9 +51,7 @@ namespace Project_Hulk
 
 					if ((Lexer.index >= Lexer.Tokens.Count || Expression.Current() != ";") && Lexer.Tokens.Count != 0)
 					{
-						Console.ForegroundColor = ConsoleColor.Red;
-						System.Console.WriteLine("LEXICAL ERROR : Missing ' ; '");
-						Console.ForegroundColor = ConsoleColor.Green;
+						 throw new DefaultError("semicolon");
 					}
 					else
 					{

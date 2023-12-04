@@ -99,8 +99,11 @@ namespace Project_Hulk
 			}
 			else 
 			{
-				System.Console.WriteLine(Token);
-				return "unexpected token"; //quitar luego
+			
+			
+				throw new DefaultError("semicolon");
+			
+				
 			}
 		}
 
